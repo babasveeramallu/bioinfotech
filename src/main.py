@@ -40,7 +40,7 @@ class DNATraitPredictor:
         self.hair_model = None
         self.ancestry_model = None
     
-    def train_all_models(self, data_dir='data'):
+    def train_all_models(self, data_dir='../data'):
         """Train all three models"""
         print("="*60)
         print("Training All Models")
@@ -56,7 +56,7 @@ class DNATraitPredictor:
         self.eye_model = EyeColorModel()
         self.eye_model.train(X_eye, y_eye)
         self.eye_model.evaluate()
-        self.eye_model.save_model('models/eye_color_model.pkl')
+        self.eye_model.save_model('../models/eye_color_model.pkl')
         
         # Train hair color model (Sprint 3)
         print("\n[Sprint 3] Training Hair Color Model...")
@@ -67,7 +67,7 @@ class DNATraitPredictor:
         X_hair, y_hair = hair_model.prepare_features(hair_snp_df, hair_labels_df)
         self.hair_model = hair_model.train(X_hair, y_hair)
         
-        with open('models/hair_color_model.pkl', 'wb') as f:
+        with open('../models/hair_color_model.pkl', 'wb') as f:
             pickle.dump(self.hair_model, f)
         print("Hair color model saved!")
         
@@ -80,7 +80,7 @@ class DNATraitPredictor:
         X_ancestry, y_ancestry = ancestry_model.prepare_features(ancestry_snp_df, ancestry_labels_df)
         self.ancestry_model = ancestry_model.train(X_ancestry, y_ancestry)
         
-        with open('models/ancestry_model.pkl', 'wb') as f:
+        with open('../models/ancestry_model.pkl', 'wb') as f:
             pickle.dump(self.ancestry_model, f)
         print("Ancestry model saved!")
         

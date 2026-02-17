@@ -80,12 +80,19 @@ class TrainingDataCreator:
     
     @staticmethod
     def encode_genotype(genotype):
-        """Convert genotype to numeric (AA=0, AG=1, GG=2)"""
+        """Convert genotype to numeric (complete encoding)"""
         encoding = {
-            'AA': 0, 'AG': 1, 'GG': 2,
-            'AC': 1, 'CC': 2, 'AT': 1, 
-            'TT': 2, 'CT': 1, 'GT': 1
+            'AA': 0, 'AC': 1, 'AG': 1, 'AT': 1,
+            'CC': 2, 'CG': 1, 'CT': 1,
+            'GG': 2, 'GT': 1,
+            'TT': 2,
+            'CA': 1, 'GA': 1, 'TA': 1,
+            'GC': 1, 'TC': 1, 'TG': 1,
+            '--': -1, 'NN': -1, '00': -1
         }
+        genotype = str(genotype).upper()
+        if len(genotype) == 2:
+            genotype = ''.join(sorted(genotype))
         return encoding.get(genotype, -1)
     
     def prepare_eye_color_features(self, snp_df, labels_df):

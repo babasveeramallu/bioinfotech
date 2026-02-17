@@ -15,8 +15,14 @@ import os
 class EyeColorModel:
     """US-05: Train Random Forest classifier for eye color"""
     
-    def __init__(self, n_estimators=100, random_state=42):
-        self.model = RandomForestClassifier(n_estimators=n_estimators, random_state=random_state)
+    def __init__(self, n_estimators=200, random_state=42):
+        self.model = RandomForestClassifier(
+            n_estimators=n_estimators, 
+            max_depth=15,
+            min_samples_split=5,
+            min_samples_leaf=2,
+            random_state=random_state
+        )
         self.X_train = None
         self.X_test = None
         self.y_train = None

@@ -97,8 +97,12 @@ class DNATraitPredictorGUI:
             ('rs12203592', 'Eye color (IRF4)'),
             ('rs1805007', 'Hair color (MC1R)'),
             ('rs1805008', 'Hair color (MC1R)'),
+            ('rs1805009', 'Hair color (MC1R)'),
+            ('rs1042602', 'Hair color (TYR)'),
+            ('rs2228479', 'Hair color (OCA2)'),
             ('rs1426654', 'Ancestry (SLC24A5)'),
             ('rs3827760', 'Ancestry (EDAR)'),
+            ('rs2814778', 'Ancestry (DARC)'),
         ]
         
         for i, (snp, description) in enumerate(key_snps):
@@ -208,22 +212,33 @@ class DNATraitPredictorGUI:
         """Run all predictions and display results"""
         try:
             # Get SNP data from inputs
-            snp_data = {snp: entry.get().upper() for snp, entry in self.snp_entries.items()}
+            snp_data = {snp: entry.get().upper().strip() for snp, entry in self.snp_entries.items()}
+            
+            # Validate inputs
+            valid_genotypes = ['AA', 'AG', 'GG', 'AC', 'CC', 'AT', 'TT', 'CT', 'GT', 'GA', 'CA', 'TA', 'TC', 'CG', 'GC']
+            for snp, genotype in snp_data.items():
+                if genotype not in valid_genotypes:
+                    messagebox.showwarning("Invalid Input", 
+                        f"Invalid genotype '{genotype}' for {snp}.\nValid: {', '.join(valid_genotypes[:5])}...")
+                    return
+            
+            # Check if models are loaded
+            if not self.eye_model or not self.hair_model or not self.ancestry_model:
+                messagebox.showerror("Models Not Loaded", 
+                    "ML models are not loaded. Please train models first:\n\npython main.py --train")
+                return
             
             # Predict eye color
-            if self.eye_model:
-                eye_result = self.predict_eye_color(snp_data)
-                self.display_eye_result(eye_result)
+            eye_result = self.predict_eye_color(snp_data)
+            self.display_eye_result(eye_result)
             
             # Predict hair color
-            if self.hair_model:
-                hair_result = self.predict_hair_color(snp_data)
-                self.display_hair_result(hair_result)
+            hair_result = self.predict_hair_color(snp_data)
+            self.display_hair_result(hair_result)
             
             # Predict ancestry
-            if self.ancestry_model:
-                ancestry_result = self.predict_ancestry(snp_data)
-                self.display_ancestry_result(ancestry_result)
+            ancestry_result = self.predict_ancestry(snp_data)
+            self.display_ancestry_result(ancestry_result)
             
         except Exception as e:
             messagebox.showerror("Prediction Error", f"Failed to predict:\n{str(e)}")
@@ -263,7 +278,8 @@ class DNATraitPredictorGUI:
         """Convert genotype to numeric"""
         encoding = {
             'AA': 0, 'AG': 1, 'GG': 2, 'AC': 1, 'CC': 2,
-            'AT': 1, 'TT': 2, 'CT': 1, 'GT': 1
+            'AT': 1, 'TT': 2, 'CT': 1, 'GT': 1, 'GA': 1,
+            'CA': 1, 'TA': 1, 'TC': 1, 'CG': 2, 'GC': 2
         }
         return encoding.get(genotype, 0)
     

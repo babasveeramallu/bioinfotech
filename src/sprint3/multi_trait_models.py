@@ -18,16 +18,29 @@ class HairColorModel:
     HAIR_COLOR_SNPS = ['rs1805007', 'rs1805008', 'rs1805009', 'rs1042602', 'rs2228479']
     
     def __init__(self):
-        self.model = RandomForestClassifier(n_estimators=100, random_state=42)
+        self.model = RandomForestClassifier(
+            n_estimators=200,
+            max_depth=15,
+            min_samples_split=5,
+            min_samples_leaf=2,
+            random_state=42
+        )
     
     @staticmethod
     def encode_genotype(genotype):
         """Convert genotype to numeric"""
         encoding = {
-            'AA': 0, 'AG': 1, 'GG': 2, 'AC': 1, 'CC': 2,
-            'AT': 1, 'TT': 2, 'CT': 1, 'GT': 1
+            'AA': 0, 'AC': 1, 'AG': 1, 'AT': 1,
+            'CC': 2, 'CG': 1, 'CT': 1,
+            'GG': 2, 'GT': 1,
+            'TT': 2,
+            'CA': 1, 'GA': 1, 'TA': 1,
+            'GC': 1, 'TC': 1, 'TG': 1
         }
-        return encoding.get(genotype.upper(), 0)
+        genotype = str(genotype).upper()
+        if len(genotype) == 2:
+            genotype = ''.join(sorted(genotype))
+        return encoding.get(genotype, 0)
     
     def prepare_features(self, snp_df, labels_df):
         """Extract hair color features"""
@@ -79,16 +92,29 @@ class AncestryModel:
     ANCESTRY_SNPS = ['rs3827760', 'rs2814778', 'rs16891982', 'rs1426654', 'rs12913832']
     
     def __init__(self):
-        self.model = RandomForestClassifier(n_estimators=100, random_state=42)
+        self.model = RandomForestClassifier(
+            n_estimators=200,
+            max_depth=15,
+            min_samples_split=5,
+            min_samples_leaf=2,
+            random_state=42
+        )
     
     @staticmethod
     def encode_genotype(genotype):
         """Convert genotype to numeric"""
         encoding = {
-            'AA': 0, 'AG': 1, 'GG': 2, 'AC': 1, 'CC': 2,
-            'AT': 1, 'TT': 2, 'CT': 1, 'GT': 1
+            'AA': 0, 'AC': 1, 'AG': 1, 'AT': 1,
+            'CC': 2, 'CG': 1, 'CT': 1,
+            'GG': 2, 'GT': 1,
+            'TT': 2,
+            'CA': 1, 'GA': 1, 'TA': 1,
+            'GC': 1, 'TC': 1, 'TG': 1
         }
-        return encoding.get(genotype.upper(), 0)
+        genotype = str(genotype).upper()
+        if len(genotype) == 2:
+            genotype = ''.join(sorted(genotype))
+        return encoding.get(genotype, 0)
     
     def prepare_features(self, snp_df, labels_df):
         """Extract ancestry features"""

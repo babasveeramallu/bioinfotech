@@ -217,14 +217,6 @@ Created for teaching genetics + AI intersection to students.
 - scikit-learn developers
 - Genetics research community
 
-## 📞 Contact
 
-For questions or collaboration:
-- GitHub Issues: [Create an issue](https://github.com/babasveeramallu/bioinfotech/issues)
-- Repository: [bioinfotech](https://github.com/babasveeramallu/bioinfotech)
-
----
-
-**⭐ Star this repo if you find it useful!**
 
 **🧬 Making genetics accessible through AI 🔬**
